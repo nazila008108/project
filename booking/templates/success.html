@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="success-box">
+    <h2>✅ Registration Successful!</h2>
+    <p>Your account has been created.</p>
+
+    <a href="/login/">
+        <button>Go to Login</button>
+    </a>
+</div>
+
+<style>
+.success-box {
+    max-width: 500px;
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    text-align: center;
+
+    background-image: url('/static/bg.jpg'); 
+    background-size: cover;
+    background-position: center;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: white; 
+}
+
+.success-box button {
+    padding: 10px 20px;
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* ✅ Mobile screen */
+@media (max-width: 600px) {
+    .success-box {
+        max-width: 90%;
+        margin-top: 40px;
+        padding: 20px;
+    }
+
+    .success-box h2 {
+        font-size: 20px;
+    }
+
+    .success-box p {
+        font-size: 14px;
+    }
+
+    .success-box button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+</style>
+
+{% endblock %}
+

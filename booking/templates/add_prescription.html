@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url("{% static 'bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+
+/* ✅ Responsive box */
+.prescription-box {
+    max-width: 400px;
+    width: 90%;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+}
+
+/* ✅ Form layout */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ✅ Inputs */
+input, textarea, button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ✅ Button */
+button {
+    background: green;
+    color: white;
+    border: none;
+}
+
+/* 📱 Mobile optimization */
+@media (max-width: 480px) {
+    .prescription-box {
+        width: 95%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+}
+</style>
+
+<div class="prescription-box">
+    <h2>Add Prescription</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Patient</label>
+        <input type="text" value="{{ patient.name }}" readonly>
+
+        <label>Medicines</label>
+        <textarea name="medicines" rows="3"></textarea>
+
+        <label>Notes</label>
+        <textarea name="notes" rows="3"></textarea>
+
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+{% endblock %}

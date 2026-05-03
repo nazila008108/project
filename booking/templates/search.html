@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h2 class="title">Find a Doctor 🩺</h2>
+
+<div class="doctor-list">
+
+    {% for d in doctors %}
+    <div class="doctor-card">
+
+        {% if d.image %}
+            <img src="{{ d.image.url }}" alt="{{ d.name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/120" alt="No Image">
+        {% endif %}
+
+        <h3>{{ d.name }}</h3>
+        <p>{{ d.specialization }}</p>
+
+        <a href="{% url 'book' d.id %}">
+            <button>Book Appointment</button>
+        </a>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+<style>
+
+/* RESET */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("{% static 'bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+
+/* OVERLAY */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+}
+
+/* TITLE */
+.title {
+    text-align: center;
+    color: white;
+    margin: 20px 0;
+}
+
+/* CARD GRID */
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+/* CARD */
+.doctor-card {
+    width: 90%;
+    max-width: 220px;
+    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* HOVER (desktop only feel) */
+.doctor-card:hover {
+    transform: scale(1.05);
+}
+
+/* IMAGE */
+.doctor-card img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* TEXT */
+.doctor-card h3 {
+    margin: 10px 0 5px;
+    color: #2c3e50;
+}
+
+.doctor-card p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* BUTTON */
+.doctor-card button {
+    width: 100%;
+    padding: 10px;
+    background: #27ae60;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.doctor-card button:hover {
+    background: #219150;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    .title {
+        font-size: 20px;
+    }
+
+    .doctor-card {
+        max-width: 95%;
+        padding: 12px;
+    }
+
+    .doctor-card img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .doctor-card h3 {
+        font-size: 16px;
+    }
+
+    .doctor-card p {
+        font-size: 14px;
+    }
+
+    .doctor-card button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="home-box">
+    <h1>WELCOME TO HEALTHPLIX 🏥</h1>
+    <h3>Hello, {{ user.username }} 👋</h3>
+
+    <p>Your trusted doctor appointment system</p>
+
+    <div class="menu">
+
+        {% if user.profile.role == "PATIENT" %}
+            <a href="{% url 'search_doctor' %}"><button>🔍 Search Doctor</button></a>
+            <a href="{% url 'my_appointments' %}"><button>📅 My Appointments</button></a>
+        {% endif %}
+
+        {% if user.profile.role == "DOCTOR" %}
+            <a href="{% url 'doctor_dashboard' %}"><button>🩺 Doctor Dashboard</button></a>
+        {% endif %}
+
+        {% if user.profile.role == "ADMIN" %}
+            <a href="{% url 'admin_dashboard' %}"><button>⚙ Admin Dashboard</button></a>
+        {% endif %}
+
+        <a href="{% url 'logout' %}"><button class="logout">🚪 Logout</button></a>
+
+    </div>
+</div>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url('/static/bg.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* BOX */
+.home-box {
+    text-align: center;
+    padding: 20px;
+    background: #ebe9f5d9;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;            
+    margin: 40px auto;      
+}
+
+/* MENU */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 300px;
+    margin: auto;
+}
+
+/* BUTTON */
+.menu button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #0724e0f0;
+    border: none;
+    color: #e9f8ec;
+    border-radius: 8px;
+}
+
+/* LOGOUT */
+.logout {
+    background: #e74c3c !important;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    .home-box {
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    .menu button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+</style>
+
+{% endblock %}

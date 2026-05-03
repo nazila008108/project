@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <!-- ✅ Mobile Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: url("{% static 'bg.jpg' %}") no-repeat center center;
+            background-size: cover;
+        }
+
+        .logo-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;              
+            max-width: 400px;
+        }
+
+        .logo-container img {
+            width: 70%;             
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .logo-container h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            letter-spacing: 2px;
+        }
+
+        /* 📱 MOBILE */
+        @media (max-width: 480px) {
+            .logo-container {
+                padding: 15px;
+            }
+
+            .logo-container h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+
+    <!-- Auto redirect -->
+    <script>
+        setTimeout(function(){
+            window.location.href = "/welcome/";
+        }, 2500);
+    </script>
+
+</head>
+
+<body>
+
+<div class="logo-container">
+    <img src="{% static 'logo.jpg' %}" alt="Healthplix Logo">
+</div>
+
+</body>
+</html>

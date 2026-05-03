@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="title">My Appointments 📅</h2>
+
+<div class="table-box">
+
+    <table>
+        <tr>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Prescription</th>
+        </tr>
+
+        {% for i in data %}
+        <tr>
+            <td>{{ i.doctor.name }}</td>
+            <td>{{ i.doctor.specialization }}</td>
+            <td>{{ i.date }}</td>
+
+            <td>
+                {% if i.status == "Approved" %}
+                    <span class="approved">Approved</span>
+                {% elif i.status == "Cancelled" %}
+                    <span class="cancelled">Cancelled</span>
+                {% else %}
+                    <span class="pending">Pending</span>
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'view_prescription' i.id %}">
+                    <button>View</button>
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No Appointments Found</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<div class="back">
+    <a href="/home/"><button>🏠 Back to Home</button></a>
+</div>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url('/static/bg.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+}
+
+.title {
+    text-align: center;
+    color: white;
+}
+
+/* TABLE */
+.table-box {
+    overflow-x: auto;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    min-width: 500px; 
+    margin: auto;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.95);
+    border-radius: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+}
+
+/* STATUS */
+.approved { color: limegreen; font-weight: bold; }
+.cancelled { color: red; font-weight: bold; }
+.pending { color: orange; font-weight: bold; }
+
+/* BUTTON */
+button {
+    padding: 8px 12px;
+    background: #3498db;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* BACK */
+.back {
+    text-align: center;
+    margin: 20px;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+}
+</style>
+
+{% endblock %}

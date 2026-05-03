@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h2 class="title">Dashboard 🩺</h2>
+
+<div class="welcome">
+    {% if role == 'doctor' %}
+        <p>Welcome Doctor <b>{{ doctor.name }}</b></p>
+    {% else %}
+        <p>Welcome Staff/Doctor</p>
+    {% endif %}
+</div>
+
+<div class="table-box">
+
+<table>
+    <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th>Prescription</th>
+    </tr>
+
+    {% for i in appointments %}
+    <tr>
+        <td>{{ i.patient.name }}</td>
+        <td>{{ i.doctor.name }}</td>
+        <td>{{ i.date }}</td>
+        <td>{{ i.time }}</td>
+
+        <td>
+            {% if i.status == "Approved" %}
+                <span class="approved">Approved</span>
+            {% elif i.status == "Cancelled" %}
+                <span class="cancelled">Cancelled</span>
+            {% else %}
+                <span class="pending">Pending</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ i.id }}">
+
+                <select name="status">
+                    <option value="Approved">Approve</option>
+                    <option value="Cancelled">Cancel</option>
+                </select>
+                <button type="submit" style="opacity:1; pointer-events:auto; background:#28a745; color:rgb(248, 247, 250);">
+                 Update
+                </button>
+            </form>
+        </td>
+
+        <td>
+            {% if i.status == "Approved" %}
+                {% if i.prescription %}
+                    <span class="approved">✔ Added</span>
+                    <a href="{% url 'view_prescription' i.id %}">
+                        <button class="view-btn">View</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'add_prescription' i.id %}">
+                        <button class="add-btn">Add</button>
+                    </a>
+                {% endif %}
+            {% else %}
+                <span class="disabled">Not allowed</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</div>
+
+<div class="back-btn">
+    <a href="/home/"><button>🏠 Back to Home</button></a>
+</div>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url("{% static 'bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+
+/* TITLE */
+.title {
+    text-align: center;
+}
+
+/* WELCOME */
+.welcome {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* TABLE */
+.table-box {
+    overflow-x: auto;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    min-width: 700px; 
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.95);
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+}
+
+/* STATUS */
+.approved { color: green; font-weight: bold; }
+.cancelled { color: red; font-weight: bold; }
+.pending { color: orange; font-weight: bold; }
+.disabled { color: gray; }
+
+/* BUTTONS */
+button {
+    padding: 6px 10px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+.view-btn { background: #3498db; }
+.add-btn { background: #8e44ad; }
+
+/* BACK */
+.back-btn {
+    text-align: center;
+    margin: 20px;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 12px;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <!-- LEFT FORM -->
+    <div class="left">
+        <div class="card">
+            <h2>Patient Registration</h2>
+
+            {% if error %}
+            <div class="error-box">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="number" name="age" placeholder="Age" required>
+
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+
+                <textarea name="address" placeholder="Address" required></textarea>
+                <input type="text" name="phone" placeholder="Phone" required>
+
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password2" placeholder="Confirm Password" required>
+
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- RIGHT PROFILE -->
+    <div class="right">
+        <div class="card">
+
+            {% if patient %}
+            <div class="success">
+                ✅ Registration Successful! <br>
+                Welcome to your profile
+            </div>
+
+            <h2>Patient Profile</h2>
+
+            <p><b>Name:</b> {{ patient.name }}</p>
+            <p><b>Email:</b> {{ patient.user.email }}</p>
+            <p><b>Age:</b> {{ patient.age }}</p>
+            <p><b>Gender:</b> {{ patient.gender }}</p>
+            <p><b>Address:</b> {{ patient.address }}</p>
+            <p><b>Phone:</b> {{ patient.phone }}</p>
+            {% else %}
+            <h3 style="text-align:center;color:gray;">Fill form to see profile</h3>
+            {% endif %}
+
+            <a href="/" class="home-btn">Go Home</a>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ✅ STYLE -->
+<style>
+
+body {
+    background: url("/static/bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    padding:10px
+}
+
+.left, .right {
+    width: 50%;
+    padding: 30px;
+}
+
+/* Cards */
+.card {
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* Inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Success */
+.success {
+    background: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Error */
+.error-box {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Home button */
+.home-btn {
+    display: block;
+    text-align: center;
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-decoration: none;
+}
+
+/* ✅ MOBILE FIX */
+@media (max-width: 768px) {
+    .left, .right {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+</style>
+
+{% endblock %}

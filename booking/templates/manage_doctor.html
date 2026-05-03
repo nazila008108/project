@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background-image: url("{% static 'bg.jpg' %}");
+    background-size: cover;
+    background-position: center;
+}
+
+/* BOX */
+.table-box {
+    width: 95%;
+    margin: 20px auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+/* SCROLL FOR MOBILE */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    min-width: 700px;   
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* IMAGE */
+img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+/* BUTTONS */
+a {
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.add-btn {
+    background: green;
+    color: white;
+}
+
+.delete-btn {
+    background: red;
+    color: white;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    img {
+        width: 40px;
+        height: 40px;
+    }
+
+    a {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+}
+</style>
+
+<div class="table-box">
+    <h2>Manage Doctors</h2>
+    
+    <a href="{% url 'add_doctor' %}" class="add-btn">+ Add Doctor</a>
+
+    <br><br>
+
+    <div class="table-wrapper">
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Specialization</th>
+            <th>Added By</th>
+            <th>Action</th>
+        </tr>
+
+        {% for doctor in doctors %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+
+            <td>
+                {% if doctor.image %}
+                    <img src="{{ doctor.image.url }}">
+                {% else %}
+                    No Image
+                {% endif %}
+            </td>
+
+            <td>{{ doctor.name }}</td>
+
+            <td>
+                {% if doctor.user %}
+                    {{ doctor.user.username }}
+                {% else %}
+                    No Login
+                {% endif %}
+            </td>
+
+            <td>{{ doctor.specialization }}</td>
+
+            <td>
+                {% if doctor.added_by %}
+                    {{ doctor.added_by.username }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'delete_doctor' doctor.id %}" class="delete-btn">
+                    Delete
+                </a>
+            </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+            <td colspan="7">No doctors available</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+
+{% endblock %}

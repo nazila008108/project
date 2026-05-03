@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="login-box">
+    <h2>User Login</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? 
+        <a href="{% url 'register' %}">Register Here</a>
+    </p>
+</div>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url("/static/bg.jpg") no-repeat center center;
+    background-size: cover;
+}
+
+/* BOX */
+.login-box {
+    max-width: 350px;
+    width: 90%;             
+    margin: 40px auto;       
+    padding: 20px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+/* INPUTS */
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* BUTTON */
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.login-box button:hover {
+    background: #2980b9;
+}
+
+/* LINK */
+.login-box a {
+    color: #2980b9;
+    text-decoration: none;
+}
+
+/* ERROR */
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    .login-box {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .login-box h2 {
+        font-size: 18px;
+    }
+
+    .login-box input,
+    .login-box button {
+        font-size: 14px;
+    }
+}
+</style>
+
+{% endblock %}

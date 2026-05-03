@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="dashboard-container">
+    <h1>🏥 Admin Dashboard</h1>
+
+    <div class="dashboard-cards">
+
+        <div class="card">
+            <h2>👨‍⚕️ Doctors</h2>
+            <p>Total: {{ doctors|length }}</p>
+            <a href="{% url 'manage_doctor' %}">Manage</a>
+        </div>
+
+        <div class="card">
+            <h2>👥 Patients</h2>
+            <p>Total: {{ patients|length }}</p>
+        </div>
+
+        <div class="card">
+            <h2>📅 Appointments</h2>
+            <p>Total: {{ appointments|length }}</p>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>Doctor List</h2>
+
+    <!-- ✅ Responsive table wrapper -->
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Specialization</th>
+                <th>Photo</th>
+            </tr>
+
+            {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.user.name }}</td>
+                <td>{{ doctor.user.username }}</td>
+                <td>{{ doctor.specialization }}</td>
+                <td>
+                    <img src="{{ doctor.photo.url }}" width="50">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <h2>Appointments</h2>
+    <ul class="appointment-list">
+        {% for a in appointments %}
+            <li>{{ a.patient }} → {{ a.doctor }} on {{ a.date }} at {{ a.time }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url("{% static 'bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+
+/* CONTAINER */
+.dashboard-container {
+    text-align: center;
+    padding: 20px;
+}
+
+/* CARDS */
+.dashboard-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; 
+    margin-top: 20px;
+}
+
+.card {
+    width: 250px;
+    max-width: 90%;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.card a {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: white;
+    background: #007bff;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+/* TABLE */
+.table-wrapper {
+    overflow-x: auto; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* APPOINTMENTS */
+.appointment-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    .dashboard-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
+</style>
+
+{% endblock %}

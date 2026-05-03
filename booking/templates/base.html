@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- ✅ VERY IMPORTANT FOR MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HEALTHPLIX</title>
+
+    <style>
+
+   
+    /* RESET */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        background: #333;
+        padding: 10px;
+    }
+
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        padding: 6px 10px;
+    }
+
+    /* CONTAINER */
+    .container {
+        max-width: 1000px;
+        width: 90%;
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    /* POPUP MESSAGE */
+    .popup {
+        background: #4CAF50;
+        color: white;
+        padding: 12px 15px;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        border-radius: 8px;
+        z-index: 999;
+        max-width: 90%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s ease;
+    }
+     .top-bar {
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+    .top-bar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 16px;
+        }
+
+    .top-bar a:hover {
+            color: #00c6ff;
+        }    
+    /* POPUP ANIMATION */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 📱 MOBILE RESPONSIVE */
+    @media (max-width: 480px) {
+
+        .nav-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+        }
+
+        .container {
+            width: 95%;
+        }
+
+        .popup {
+            left: 5%;
+            right: 5%;
+            text-align: center;
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>
+         <a href="{% url 'home' %}" style="color:rgb(255, 250, 250); text-decoration:none;">Home||</a>
+         
+        <a href="{% url 'login' %}" style="color:rgb(255, 250, 250); text-decoration:none;">Login||</a>
+
+    {% if user.is_staff %}
+        <a href="{% url 'admin_dashboard' %}"style="color:rgb(255, 250, 250); text-decoration:none;">⚙ Admin Dashboard</a>
+    {% endif %}
+    </div>
+</div>
+
+
+<!-- MESSAGE POPUP -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="popup">
+        {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- PAGE CONTENT -->
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

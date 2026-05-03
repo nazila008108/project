@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: url("{% static 'bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+
+
+.table-wrapper {
+    overflow-x: auto;
+    padding: 10px;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    min-width: 300px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* CELLS */
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+    td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="table-wrapper">
+<table>
+
+{% for i in appointments %}
+<tr>
+    <td>{{ i.patient.name }}</td>
+
+    <td>
+        <a href="{% url 'add_prescription' i.id %}">
+            <button>Add Prescription</button>
+        </a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+
+{% endblock %}
