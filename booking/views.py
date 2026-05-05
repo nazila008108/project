@@ -43,35 +43,8 @@ def login_view(request):
 
             else:
                 return redirect('home')
-        else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
 
     return render(request, 'login.html')
-def login_view(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            # ✅ Admin
-            if user.is_superuser:
-                return redirect('admin_dashboard')
-
-            # ✅ Staff → Doctor Dashboard
-            elif user.is_staff: 
-                return redirect('doctor_dashboard')
-
-            else:
-                return redirect('home')
-        else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
-
-    return render(request, 'login.html')
-
 
 def register_view(request):
     if request.method == "POST":
@@ -101,6 +74,7 @@ def register_view(request):
             email=email,
             password=password
         )
+  
         Patient.objects.create(
            user=user,
            name=name,
@@ -110,7 +84,6 @@ def register_view(request):
            address=address,
            phone=phone
         )
-        
         return redirect('success') 
     return render(request, 'register.html')
        
@@ -128,7 +101,7 @@ def search(request):
 @role_required("PATIENT")
 def book(request, id):
     doctor = get_object_or_404(Doctor, id=id)
-    patient = request.user.patient 
+    patient = Patient.objects.get(user=request.user) 
     
     if request.method == "POST":
         date = request.POST.get('date')
@@ -164,7 +137,7 @@ def history(request):
 @login_required(login_url='login')
 @role_required("ADMIN")
 def admin_dashboard(request):
-    doctors = Doctor.objects.all()
+    doctors = Profile.objects.filter(role="DOCTOR")
     patients = User.objects.filter(profile__role="PATIENT")
     appointments = Appointment.objects.all()
 

@@ -41,13 +41,30 @@
 
             {% for doctor in doctors %}
             <tr>
-                <td>{{ doctor.user.name }}</td>
-                <td>{{ doctor.user.username }}</td>
-                <td>{{ doctor.specialization }}</td>
-                <td>
-                    <img src="{{ doctor.photo.url }}" width="50">
-                </td>
-            </tr>
+
+            <!-- ✅ FIX NAME -->
+            <td>
+                {% if doctor.user.first_name %}
+                    {{ doctor.user.first_name }} {{ doctor.user.last_name }}
+                {% else %}
+                    {{ doctor.user.username }}
+                {% endif %}
+            </td>
+
+            <!-- ✅ USERNAME -->
+            <td>{{ doctor.user.username }}</td>
+              <td>{{ doctor.user.profile.specialization }}</td>
+
+            <!-- ✅ PHOTO (CORRECT WAY) -->
+            <td>
+                {% if doctor.user.profile.image %}
+                    <img src="{{ doctor.user.profile.image.url }}" width="50" height="50" style="border-radius:50%;">
+                {% else %}
+                    No Image
+                {% endif %}
+            </td>
+
+        </tr>
             {% endfor %}
         </table>
     </div>

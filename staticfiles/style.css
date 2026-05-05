@@ -1,0 +1,39 @@
+body{
+    margin:0;
+    font-family:Arial;
+    background:url("bg.jpg") no-repeat center center;
+    background-size:cover;
+}
+
+.container{
+    max-width:400px;
+    width:90%;              
+    margin:20px auto;       
+    background:rgba(255,255,255,0.9);
+    padding:15px;
+    border-radius:15px;
+}
+
+.logo-box{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.logo{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+}
+
+/* ✅ Mobile optimization */
+@media (max-width:480px){
+    .container{
+        width:95%;
+        padding:12px;
+    }
+
+    .logo{
+        width:80px;
+        height:80px;
+    }
+}

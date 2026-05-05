@@ -16,6 +16,7 @@ class Profile(models.Model):
     is_doctor = models.BooleanField(default=False)
     role = models.CharField(max_length=10, choices=ROLE, default='PATIENT')
     status = models.CharField(max_length=20, default="INACTIVE")
+    specialization = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
