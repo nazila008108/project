@@ -27,7 +27,7 @@ class Doctor(models.Model):
     # optional doctor login
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    # ✅ who added doctor
+    
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctors', null=True, blank=True)
     
     name = models.CharField(max_length=100)
