@@ -7,22 +7,22 @@ from .models import *
 from .decorators import role_required
 from .models import Appointment
 from booking.models import Doctor,Staff
-from .models import Patient,Prescription 
+from .models import Patient,Prescription
 from django.http import HttpResponse
 from django.db import IntegrityError
 
 def logo(request):
     return render(request, 'logo.html')
 
-def welcome(request):  
+def welcome(request):
     return render(request, 'welcome.html')
-    
+
 def home(request):
     return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
-    
+
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -38,13 +38,40 @@ def login_view(request):
                 return redirect('admin_dashboard')
 
             # ✅ Staff → Doctor Dashboard
-            elif user.is_staff: 
+            elif user.is_staff:
                 return redirect('doctor_dashboard')
 
             else:
                 return redirect('home')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
 
     return render(request, 'login.html')
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            # ✅ Admin
+            if user.is_superuser:
+                return redirect('admin_dashboard')
+
+            # ✅ Staff → Doctor Dashboard
+            elif user.is_staff:
+                return redirect('doctor_dashboard')
+
+            else:
+                return redirect('home')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'login.html')
+
 
 def register_view(request):
     if request.method == "POST":
@@ -74,7 +101,6 @@ def register_view(request):
             email=email,
             password=password
         )
-  
         Patient.objects.create(
            user=user,
            name=name,
@@ -84,9 +110,10 @@ def register_view(request):
            address=address,
            phone=phone
         )
-        return redirect('success') 
+
+        return redirect('success')
     return render(request, 'register.html')
-       
+
 def logout_view(request):
     logout(request)
     return redirect('login')
@@ -99,10 +126,9 @@ def search(request):
 
 @login_required(login_url='login')
 @role_required("PATIENT")
-def book(request, id):
-    doctor = get_object_or_404(Doctor, id=id)
-    patient = Patient.objects.get(user=request.user) 
-    
+def book(request,id):
+    doctor = Doctor.objects.get(id=id)
+    patient = Patient.objects.get(user=request.user)
     if request.method == "POST":
         date = request.POST.get('date')
         time = request.POST.get('time')
@@ -129,10 +155,10 @@ def success_view(request):
 @login_required(login_url='login')
 @role_required("PATIENT")
 def history(request):
-    patient = get_object_or_404(Patient, user=request.user)
+    patient = Patient.objects.get(user=request.user)
     data = Appointment.objects.filter(patient=patient)
     return render(request, 'history.html', {'data': data})
-  
+
 
 @login_required(login_url='login')
 @role_required("ADMIN")
@@ -147,8 +173,6 @@ def admin_dashboard(request):
         'appointments': appointments,
     }
     return render(request, 'admin_dashboard.html', context)
-
-
 @login_required(login_url='login')
 def doctor_dashboard(request):
     user = request.user
@@ -170,7 +194,7 @@ def doctor_dashboard(request):
         return redirect("doctor_dashboard")
 
     if hasattr(user, 'doctor'):
-        appointments = Appointment.objects.filter(doctor=user.doctor)
+        appointments = Appointment.objects.filter(doctor=request.user.doctor)
 
     elif user.is_staff:
         appointments = Appointment.objects.all()
@@ -183,22 +207,19 @@ def doctor_dashboard(request):
         'role': 'doctor' if hasattr(user, 'is_doctor') and user.is_doctor else 'staff',
         'doctor': user
     })
-
 def add_prescription(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    # ✅ Restrict: Only doctors allowed
     if not hasattr(request.user, 'doctor'):
         messages.error(request, "Only doctors can add prescriptions.")
-        return redirect('doctor_dashboard')  # or staff dashboard
+        return redirect('doctor_dashboard')
 
-    # ✅ Get objects
-    appointment = get_object_or_404(Appointment, id=id)
+    appointment = Appointment.objects.get(id=id)
     doctor = request.user.doctor
     patient = appointment.patient
 
-    # ✅ POST logic
+
     if request.method == "POST":
         medicines = request.POST.get('medicines')
         notes = request.POST.get('notes')
@@ -219,7 +240,7 @@ def add_prescription(request, id):
         messages.success(request, "Prescription added successfully")
         return redirect('doctor_dashboard')
 
-    # ✅ GET request
+
     return render(request, 'add_prescription.html', {'appointment': appointment})
 
 
@@ -229,7 +250,7 @@ def view_prescription(request, id):
     p = get_object_or_404(Prescription, appointment=appointment)
 
     return render(request, 'view_prescription.html', {'p': p})
-   
+
 
 def manage_doctor(request):
     doctors = Doctor.objects.all()
@@ -261,7 +282,7 @@ def add_doctor(request):
             user = User.objects.create_user(
                 username=username,
                 email=email,
-                password=password   
+                password=password
             )
 
             user.first_name = name
